@@ -1,0 +1,10 @@
+:root {
+  --primary: #FFD370;
+  --gray: #9F9A91;
+  --secondary: #333333;
+  --danger: #d87355;
+}
+
+body {
+  margin: 0;
+}
