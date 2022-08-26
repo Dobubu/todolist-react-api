@@ -1,6 +1,6 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
-import { MainContainer } from "./MainStyled";
+import { MainContainer } from './MainStyled';
 
 export const LoginPage = styled.div`
   background-color: var(--primary);
@@ -15,7 +15,7 @@ export const Container = styled(MainContainer)`
   justify-content: space-between;
   align-items: center;
   width: 800px;
-  
+
   @media (max-width: 576px) {
     width: 100%;
     flex-direction: column;
@@ -34,7 +34,7 @@ export const Side = styled.div`
   @media (max-width: 576px) {
     width: 100%;
   }
-`
+`;
 
 export const LogoImg = styled.img`
   margin-bottom: 16px;
@@ -42,13 +42,13 @@ export const LogoImg = styled.img`
   @media (max-width: 576px) {
     width: 100%;
   }
-`
+`;
 
 export const BgImg = styled.img`
   @media (max-width: 576px) {
     display: none;
   }
-`
+`;
 
 export const FormControls = styled.form`
   margin-left: 100px;
@@ -58,7 +58,7 @@ export const FormControls = styled.form`
   @media (max-width: 576px) {
     margin-left: 0;
   }
-`
+`;
 
 export const FormControlsTxt = styled.h2`
   font-size: 1.5rem;
@@ -75,7 +75,7 @@ export const FormControlsLabel = styled.label`
   font-size: 0.875rem;
   font-weight: bold;
   margin: 16px 0 4px 0;
-`
+`;
 
 export const FormControlsInput = styled.input`
   font-weight: normal;
@@ -92,7 +92,7 @@ export const FormControlsInput = styled.input`
   &:placeholder {
     color: var(--gray);
   }
-`
+`;
 
 export const FormControlsBtnSubmit = styled.input`
   width: 128px;
@@ -107,7 +107,7 @@ export const FormControlsBtnSubmit = styled.input`
   cursor: pointer;
   text-align: center;
   font-size: 1rem;
-`
+`;
 
 export const FormControlsBtnLink = styled.a`
   text-decoration: none;
@@ -117,10 +117,10 @@ export const FormControlsBtnLink = styled.a`
   font-weight: bold;
   text-decoration: none;
   text-align: center;
-`
+`;
 
 export const FormControlsErrorText = styled.span`
   margin: 4px 0 16px 0;
   color: var(--danger);
   font-size: 0.875rem;
-`
+`;

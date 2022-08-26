@@ -1,7 +1,7 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route } from 'react-router-dom';
 
-import Login from "./pages/Login";
-import TodoList from "./pages/TodoList";
+import Login from './pages/Login';
+import TodoList from './pages/TodoList';
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         <Route path="todolist" element={<TodoList />} />
       </Routes>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

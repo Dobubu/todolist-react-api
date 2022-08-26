@@ -1,6 +1,6 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
-import { MainContainer } from "./MainStyled";
+import { MainContainer } from './MainStyled';
 
 export const TodoListPage = styled.div`
   background-image: linear-gradient(175deg, var(--primary) 60%, #fff 40%);
@@ -37,28 +37,28 @@ export const Nav = styled.nav`
     display: flex;
     font-size: 1rem;
 
-      a {
-        text-decoration: none;
-        color: var(--secondary);
-        margin-left: 24px;
+    a {
+      text-decoration: none;
+      color: var(--secondary);
+      margin-left: 24px;
+      cursor: pointer;
 
-        &:hover {
-          color: #d87355;
-        }
-
-        span {
-          font-weight: bold;
-        }
+      &:hover {
+        color: #d87355;
       }
-  }
 
-`
+      span {
+        font-weight: bold;
+      }
+    }
+  }
+`;
 
 export const NavItem = styled.li`
   @media (max-width: 576px) {
     display: none;
   }
-`
+`;
 
 export const Container = styled(MainContainer)`
   padding: 16px 32px;
@@ -66,7 +66,7 @@ export const Container = styled(MainContainer)`
   @media (max-width: 576px) {
     background-image: linear-gradient(175deg, var(--primary) 100%, #fff 0%);
   }
-`
+`;
 
 export const TodoWrapper = styled.div`
   width: 500px;
@@ -75,9 +75,9 @@ export const TodoWrapper = styled.div`
   @media (max-width: 576px) {
     width: 100%;
   }
-`
+`;
 
-export const TodoInputEl = styled.div`
+export const TodoInputEl = styled.form`
   width: 100%;
   display: flex;
   position: relative;
@@ -111,13 +111,13 @@ export const TodoInputEl = styled.div`
     padding: 10px;
     cursor: pointer;
   }
-`
+`;
 
 export const TodoContent = styled.div`
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
-`
+`;
 
 export const TodoTab = styled.ul`
   display: flex;
@@ -142,11 +142,11 @@ export const TodoTab = styled.ul`
     color: var(--secondary);
     border-bottom: 2px solid var(--secondary);
   }
-`
+`;
 
 export const TodoItems = styled.div`
   padding: 23px 17px 32px 24px;
-`
+`;
 
 export const TodoItemWrapper = styled.ul`
   margin-bottom: 8px;
@@ -170,7 +170,7 @@ export const TodoItemWrapper = styled.ul`
       opacity: 1;
     }
   }
-`
+`;
 
 export const TodoLabel = styled.label`
   width: 100%;
@@ -180,7 +180,7 @@ export const TodoLabel = styled.label`
   padding-bottom: 15px;
   color: var(--secondary);
   line-height: 20.27px;
-`
+`;
 
 export const TodoInput = styled.input`
   width: 20px;
@@ -194,7 +194,7 @@ export const TodoInput = styled.input`
     text-decoration: line-through;
     transition: all 0.4s ease-in-out;
   }
-`
+`;
 
 export const TodoStatistics = styled.div`
   display: flex;
@@ -211,4 +211,4 @@ export const TodoStatistics = styled.div`
     text-decoration: none;
     cursor: pointer;
   }
-`
+`;

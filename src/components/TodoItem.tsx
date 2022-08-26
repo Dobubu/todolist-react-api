@@ -1,6 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { TodoItemWrapper, TodoLabel, TodoInput, } from "../pages/TodoListStyled";
+import { TodoItemWrapper, TodoLabel, TodoInput } from '../pages/TodoListStyled';
 
 interface TodoItem {
   id: string;
@@ -9,7 +9,7 @@ interface TodoItem {
 }
 
 interface TodoItemProps {
-  item: TodoItem
+  item: TodoItem;
 }
 
 const TodoItem = ({ item }: TodoItemProps) => {
@@ -17,7 +17,7 @@ const TodoItem = ({ item }: TodoItemProps) => {
     <TodoItemWrapper>
       <li>
         <TodoLabel>
-          <TodoInput type="checkbox" checked={item.completed_at} onChange={(e) => console.log(e)}/>
+          <TodoInput type="checkbox" checked={item.completed_at} onChange={(e) => console.log(e)} />
           <span>{item.content}</span>
         </TodoLabel>
         <a href="#">
@@ -25,7 +25,7 @@ const TodoItem = ({ item }: TodoItemProps) => {
         </a>
       </li>
     </TodoItemWrapper>
-  )
-}
+  );
+};
 
-export default TodoItem
+export default TodoItem;
