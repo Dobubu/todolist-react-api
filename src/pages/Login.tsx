@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from "react-router-dom";
 
 import { LoginPage, Container, Side, LogoImg, BgImg, FormControls, FormControlsTxt, FormControlsLabel, FormControlsInput, FormControlsBtnSubmit, FormControlsBtnLink, FormControlsErrorText } from "./LoginStyled";
 
@@ -19,7 +20,9 @@ const LoginOrSign = ({ isLogin, setIsLogin }: LoginOrSignProps) => {
         <FormControlsErrorText>此欄位不可留空</FormControlsErrorText>
         <FormControlsLabel htmlFor="pwd">密碼</FormControlsLabel>
         <FormControlsInput type="password" name="pwd" id="pwd" placeholder="請輸入密碼" required></FormControlsInput>
-        <FormControlsBtnSubmit type="button" value="登入"></FormControlsBtnSubmit>
+        <Link className="text-center" to="todolist">
+          <FormControlsBtnSubmit type="button" value="登入"></FormControlsBtnSubmit>
+        </Link>
         <FormControlsBtnLink onClick={toggleLogin}>註冊帳號</FormControlsBtnLink>
       </>
     )
@@ -35,7 +38,9 @@ const LoginOrSign = ({ isLogin, setIsLogin }: LoginOrSignProps) => {
       <FormControlsInput type="password" id="pwd" name="pwd" placeholder="請輸入密碼" required></FormControlsInput>
       <FormControlsLabel htmlFor="pwd">再次輸入密碼</FormControlsLabel>
       <FormControlsInput type="password" id="pwd" name="pwd" placeholder="再次輸入密碼" required></FormControlsInput>
-      <FormControlsBtnSubmit type="button" value="註冊帳號"></FormControlsBtnSubmit>
+      <Link className="text-center" to="todolist">
+        <FormControlsBtnSubmit type="button" value="註冊帳號"></FormControlsBtnSubmit>
+      </Link>
       <FormControlsBtnLink onClick={toggleLogin}>登入</FormControlsBtnLink>
     </>
   )
