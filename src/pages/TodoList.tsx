@@ -74,6 +74,19 @@ const TodoList = () => {
     }
   };
 
+  const clearCompletedTodos = async () => {
+    const completedList = list.filter((o) => o.completed_at);
+
+    if (completedList.length) {
+      const promiseArray = completedList.map((o) => apiDeleteTodo(o.id));
+      await Promise.all(promiseArray);
+      fetchList();
+      alert('清除成功');
+    } else {
+      alert('目前沒有完成項目');
+    }
+  };
+
   useEffect(() => {
     fetchList();
   }, []);
@@ -109,7 +122,7 @@ const TodoList = () => {
               ))}
               <TodoStatistics>
                 <p> {list.length} 個已完成項目</p>
-                <a href="#">清除已完成項目</a>
+                <a onClick={clearCompletedTodos}>清除已完成項目</a>
               </TodoStatistics>
             </TodoItems>
           </TodoContent>
