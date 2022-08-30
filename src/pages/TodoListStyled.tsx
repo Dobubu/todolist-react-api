@@ -212,3 +212,14 @@ export const TodoStatistics = styled.div`
     cursor: pointer;
   }
 `;
+
+export const TodoEmpty = styled.div`
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  p {
+    margin-bottom: 16px;
+  }
+`;
