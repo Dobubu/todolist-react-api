@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { apiGetTodoList, apiAddTodo, Todo, apiDeleteTodo, apiToggleTodo } from '../api/todo';
 import {
-  TodoListPage,
   Container,
   TodoWrapper,
   TodoInputEl,
@@ -13,7 +12,6 @@ import {
   TodoItems,
   TodoStatistics
 } from './TodoListStyled';
-import NavBar from '../components/NavBar';
 import TodoItem from '../components/TodoItem';
 
 export enum TodoStatus {
@@ -119,57 +117,54 @@ const TodoList = () => {
   }, []);
 
   return (
-    <TodoListPage>
-      <NavBar />
-      <Container>
-        <TodoWrapper>
-          <TodoInputEl>
-            <input type="text" value={todo} onChange={todoHandler} placeholder="請輸入待辦事項" />
-            <a onClick={addTodo}>
-              <FontAwesomeIcon icon="plus" />
-            </a>
-          </TodoInputEl>
-          <TodoContent>
-            <TodoTab>
-              <li>
-                <TodoTabItem
-                  activeStatus={todoStatus === TodoStatus.All}
-                  onClick={() => setTodoStatus(TodoStatus.All)}>
-                  全部
-                </TodoTabItem>
-              </li>
-              <li>
-                <TodoTabItem
-                  activeStatus={todoStatus === TodoStatus.Open}
-                  onClick={() => setTodoStatus(TodoStatus.Open)}>
-                  待完成
-                </TodoTabItem>
-              </li>
-              <li>
-                <TodoTabItem
-                  activeStatus={todoStatus === TodoStatus.Completed}
-                  onClick={() => setTodoStatus(TodoStatus.Completed)}>
-                  已完成
-                </TodoTabItem>
-              </li>
-            </TodoTab>
-            <TodoItems>
-              {filterList.map((o) => (
-                <TodoItem key={o.id} item={o} deleteTodo={deleteTodo} toggleTodo={toggleTodo} />
-              ))}
-              <TodoStatistics>
-                {todoStatus === TodoStatus.Completed ? (
-                  <p> {list.filter((o) => o.completed_at).length} 個已完成項目</p>
-                ) : (
-                  <p> {list.filter((o) => !o.completed_at).length} 個待完成項目</p>
-                )}
-                <a onClick={clearCompletedTodos}>清除已完成項目</a>
-              </TodoStatistics>
-            </TodoItems>
-          </TodoContent>
-        </TodoWrapper>
-      </Container>
-    </TodoListPage>
+    <Container>
+      <TodoWrapper>
+        <TodoInputEl onSubmit={addTodo}>
+          <input type="input" value={todo} onChange={todoHandler} placeholder="請輸入待辦事項" />
+          <a type="submit">
+            <FontAwesomeIcon icon="plus" />
+          </a>
+        </TodoInputEl>
+        <TodoContent>
+          <TodoTab>
+            <li>
+              <TodoTabItem
+                activeStatus={todoStatus === TodoStatus.All}
+                onClick={() => setTodoStatus(TodoStatus.All)}>
+                全部
+              </TodoTabItem>
+            </li>
+            <li>
+              <TodoTabItem
+                activeStatus={todoStatus === TodoStatus.Open}
+                onClick={() => setTodoStatus(TodoStatus.Open)}>
+                待完成
+              </TodoTabItem>
+            </li>
+            <li>
+              <TodoTabItem
+                activeStatus={todoStatus === TodoStatus.Completed}
+                onClick={() => setTodoStatus(TodoStatus.Completed)}>
+                已完成
+              </TodoTabItem>
+            </li>
+          </TodoTab>
+          <TodoItems>
+            {filterList.map((o) => (
+              <TodoItem key={o.id} item={o} deleteTodo={deleteTodo} toggleTodo={toggleTodo} />
+            ))}
+            <TodoStatistics>
+              {todoStatus === TodoStatus.Completed ? (
+                <p> {list.filter((o) => o.completed_at).length} 個已完成項目</p>
+              ) : (
+                <p> {list.filter((o) => !o.completed_at).length} 個待完成項目</p>
+              )}
+              <a onClick={clearCompletedTodos}>清除已完成項目</a>
+            </TodoStatistics>
+          </TodoItems>
+        </TodoContent>
+      </TodoWrapper>
+    </Container>
   );
 };
 
