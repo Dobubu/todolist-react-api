@@ -9,15 +9,24 @@ import {
   TodoInputEl,
   TodoContent,
   TodoTab,
+  TodoTabItem,
   TodoItems,
   TodoStatistics
 } from './TodoListStyled';
 import NavBar from '../components/NavBar';
 import TodoItem from '../components/TodoItem';
 
+export enum TodoStatus {
+  All = 'All',
+  Open = 'Open',
+  Completed = 'Completed'
+}
+
 const TodoList = () => {
   const [list, setList] = useState<Todo[]>([]);
+  const [filterList, setFilterList] = useState<Todo[]>([]);
   const [todo, setTodo] = useState('');
+  const [todoStatus, setTodoStatus] = useState<TodoStatus>(TodoStatus.All);
 
   const fetchList = async () => {
     try {
@@ -87,6 +96,24 @@ const TodoList = () => {
     }
   };
 
+  const filterListHandler = () => {
+    switch (todoStatus) {
+      case TodoStatus.Open:
+        setFilterList(list.filter((o) => !o.completed_at));
+        break;
+      case TodoStatus.Completed:
+        setFilterList(list.filter((o) => o.completed_at));
+        break;
+      default:
+        setFilterList(list);
+        break;
+    }
+  };
+
+  useEffect(() => {
+    filterListHandler();
+  }, [todoStatus, list]);
+
   useEffect(() => {
     fetchList();
   }, []);
@@ -105,23 +132,37 @@ const TodoList = () => {
           <TodoContent>
             <TodoTab>
               <li>
-                <a href="#" className="active">
+                <TodoTabItem
+                  activeStatus={todoStatus === TodoStatus.All}
+                  onClick={() => setTodoStatus(TodoStatus.All)}>
                   全部
-                </a>
+                </TodoTabItem>
               </li>
               <li>
-                <a href="#">待完成</a>
+                <TodoTabItem
+                  activeStatus={todoStatus === TodoStatus.Open}
+                  onClick={() => setTodoStatus(TodoStatus.Open)}>
+                  待完成
+                </TodoTabItem>
               </li>
               <li>
-                <a href="#">已完成</a>
+                <TodoTabItem
+                  activeStatus={todoStatus === TodoStatus.Completed}
+                  onClick={() => setTodoStatus(TodoStatus.Completed)}>
+                  已完成
+                </TodoTabItem>
               </li>
             </TodoTab>
             <TodoItems>
-              {list.map((o) => (
+              {filterList.map((o) => (
                 <TodoItem key={o.id} item={o} deleteTodo={deleteTodo} toggleTodo={toggleTodo} />
               ))}
               <TodoStatistics>
-                <p> {list.length} 個已完成項目</p>
+                {todoStatus === TodoStatus.Completed ? (
+                  <p> {list.filter((o) => o.completed_at).length} 個已完成項目</p>
+                ) : (
+                  <p> {list.filter((o) => !o.completed_at).length} 個待完成項目</p>
+                )}
                 <a onClick={clearCompletedTodos}>清除已完成項目</a>
               </TodoStatistics>
             </TodoItems>

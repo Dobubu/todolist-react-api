@@ -126,22 +126,22 @@ export const TodoTab = styled.ul`
   li {
     width: 100%;
   }
+`;
 
-  a {
-    display: block;
-    color: var(--gray);
-    text-decoration: none;
-    line-height: 20px;
-    font-weight: bold;
-    text-align: center;
-    padding: 16px;
-    border-bottom: 2px solid #efefef;
-  }
+interface TodoTabItemProps {
+  activeStatus: boolean;
+}
 
-  .active {
-    color: var(--secondary);
-    border-bottom: 2px solid var(--secondary);
-  }
+export const TodoTabItem = styled.a<TodoTabItemProps>`
+  display: block;
+  color: ${(props) => (props.activeStatus ? ' var(--secondary)' : 'var(--gray)')};
+  text-decoration: none;
+  line-height: 20px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  padding: 16px;
+  border-bottom: 2px solid ${(props) => (props.activeStatus ? ' var(--secondary)' : '#efefef')}; ;
 `;
 
 export const TodoItems = styled.div`
