@@ -117,6 +117,7 @@ export const FormControlsBtnLink = styled.a`
   font-weight: bold;
   text-decoration: none;
   text-align: center;
+  cursor: pointer;
 `;
 
 export const FormControlsErrorText = styled.span`

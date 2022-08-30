@@ -14,7 +14,7 @@ import {
   FormControlsBtnSubmit,
   FormControlsBtnLink,
   FormControlsErrorText
-} from './LoginStyled';
+} from './AuthStyled';
 
 interface LoginOrSignProps {
   isLogin: boolean;
@@ -89,7 +89,7 @@ const LoginOrSign = ({ isLogin, setIsLogin }: LoginOrSignProps) => {
   );
 };
 
-const Login = () => {
+const Auth = () => {
   const [isLogin, setIsLogin] = useState(false);
 
   return (
@@ -111,4 +111,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Auth;
