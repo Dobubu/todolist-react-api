@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { apiGetTodoList, apiAddTodo, Todo } from '../api/todo';
 import {
   TodoListPage,
   Container,
@@ -14,38 +16,41 @@ import NavBar from '../components/NavBar';
 import TodoItem from '../components/TodoItem';
 
 const TodoList = () => {
-  const list = [
-    {
-      id: '8f19f39bb12058ca83e6f997aefe3813',
-      content: '把冰箱發霉的檸檬拿去丟',
-      completed_at: true
-    },
-    {
-      id: '8f19f39bb12058ca83e6f997aefe3814',
-      content: '打電話叫媽媽匯款給我',
-      completed_at: false
-    },
-    {
-      id: '8f19f39bb12058ca83e6f997aefe3815',
-      content: '整理電腦資料夾',
-      completed_at: false
-    },
-    {
-      id: '8f19f39bb12058ca83e6f997aefe3816',
-      content: '繳電費水費瓦斯費',
-      completed_at: false
-    },
-    {
-      id: '8f19f39bb12058ca83e6f997aefe3817',
-      content: '約vicky禮拜三泡溫泉',
-      completed_at: false
-    },
-    {
-      id: '8f19f39bb12058ca83e6f997aefe3818',
-      content: '約ada禮拜四吃晚餐',
-      completed_at: false
+  const [list, setList] = useState<Todo[]>([]);
+  const [todo, setTodo] = useState('');
+
+  const fetchList = async () => {
+    try {
+      const res = await apiGetTodoList();
+      setList(res.data.todos);
+    } catch (e: any) {
+      alert(e.message);
     }
-  ];
+  };
+
+  const todoHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTodo(e.target.value);
+  };
+
+  const addTodo = async () => {
+    try {
+      const dict = {
+        todo: {
+          content: todo
+        }
+      };
+      await apiAddTodo(dict);
+
+      setTodo('');
+      fetchList();
+    } catch (e: any) {
+      alert(e.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchList();
+  }, []);
 
   return (
     <TodoListPage>
@@ -53,8 +58,8 @@ const TodoList = () => {
       <Container>
         <TodoWrapper>
           <TodoInputEl>
-            <input type="text" placeholder="請輸入待辦事項" />
-            <a href="#">
+            <input type="text" value={todo} onChange={todoHandler} placeholder="請輸入待辦事項" />
+            <a onClick={addTodo}>
               <FontAwesomeIcon icon="plus" />
             </a>
           </TodoInputEl>
@@ -77,7 +82,7 @@ const TodoList = () => {
                 <TodoItem key={o.id} item={o} />
               ))}
               <TodoStatistics>
-                <p> 5 個已完成項目</p>
+                <p> {list.length} 個已完成項目</p>
                 <a href="#">清除已完成項目</a>
               </TodoStatistics>
             </TodoItems>

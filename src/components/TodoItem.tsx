@@ -1,15 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { Todo } from '../api/todo';
 import { TodoItemWrapper, TodoLabel, TodoInput } from '../pages/TodoListStyled';
 
-interface TodoItem {
-  id: string;
-  content: string;
-  completed_at: boolean;
-}
-
 interface TodoItemProps {
-  item: TodoItem;
+  item: Todo;
 }
 
 const TodoItem = ({ item }: TodoItemProps) => {
@@ -17,7 +12,7 @@ const TodoItem = ({ item }: TodoItemProps) => {
     <TodoItemWrapper>
       <li>
         <TodoLabel>
-          <TodoInput type="checkbox" checked={item.completed_at} onChange={(e) => console.log(e)} />
+          <TodoInput type="checkbox" />
           <span>{item.content}</span>
         </TodoLabel>
         <a href="#">
