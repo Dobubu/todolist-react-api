@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { apiGetTodoList, apiAddTodo, Todo, apiDeleteTodo } from '../api/todo';
+import { apiGetTodoList, apiAddTodo, Todo, apiDeleteTodo, apiToggleTodo } from '../api/todo';
 import {
   TodoListPage,
   Container,
@@ -59,6 +59,21 @@ const TodoList = () => {
     }
   };
 
+  const toggleTodo = async (id: string) => {
+    try {
+      const res = await apiToggleTodo(id);
+
+      fetchList();
+      if (res.data.completed_at) {
+        alert(`${res.data.content} 切換成完成`);
+      } else {
+        alert(`${res.data.content} 切換成待完成`);
+      }
+    } catch (e: any) {
+      alert(e.message);
+    }
+  };
+
   useEffect(() => {
     fetchList();
   }, []);
@@ -90,7 +105,7 @@ const TodoList = () => {
             </TodoTab>
             <TodoItems>
               {list.map((o) => (
-                <TodoItem key={o.id} item={o} deleteTodo={deleteTodo} />
+                <TodoItem key={o.id} item={o} deleteTodo={deleteTodo} toggleTodo={toggleTodo} />
               ))}
               <TodoStatistics>
                 <p> {list.length} 個已完成項目</p>

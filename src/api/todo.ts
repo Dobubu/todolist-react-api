@@ -25,4 +25,5 @@ export const apiUpdateTodo = async (payload: AddTodoReq, todoId: string) =>
 
 export const apiDeleteTodo = async (todoId: string) => TodoAPI.delete(`/todos/${todoId}`);
 
-export const apiToggleTodo = async (todoId: string) => TodoAPI.patch(`/todos/${todoId}/toggle`);
+export const apiToggleTodo = async (todoId: string) =>
+  TodoAPI.patch<Todo>(`/todos/${todoId}/toggle`);
