@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import { useForm } from 'react-hook-form';
 import {
   LoginPage,
   Container,
@@ -15,82 +16,210 @@ import {
   FormControlsBtnLink,
   FormControlsErrorText
 } from './AuthStyled';
+import authService from '../services/useAuth';
+import { SignUpReq, LoginReq } from '../api/auth';
 
 interface LoginOrSignProps {
   isLogin: boolean;
   setIsLogin: (o: boolean) => void;
+  signUp: (o: SignUpReq) => void;
+  login: (o: LoginReq) => void;
 }
 
-const LoginOrSign = ({ isLogin, setIsLogin }: LoginOrSignProps) => {
+interface LoginForm {
+  loginEmail: string;
+  loginPassword: string;
+}
+
+interface SignUpForm {
+  signUpEmail: string;
+  signUpNickname: string;
+  signUpPassword: string;
+  signUpRePassword: string;
+}
+
+interface AuthForm extends LoginForm, SignUpForm {}
+
+const LoginOrSign = ({ isLogin, setIsLogin, signUp, login }: LoginOrSignProps) => {
   const toggleLogin = () => setIsLogin(!isLogin);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors }
+  } = useForm<AuthForm>();
+
+  const onSubmit = (data: any) => {
+    if (isLogin) {
+      const { loginEmail: email, loginPassword: password } = data;
+      return login({
+        user: {
+          email,
+          password
+        }
+      });
+    }
+    const { signUpEmail: email, signUpNickname: nickname, signUpPassword: password } = data;
+
+    return signUp({
+      user: {
+        email,
+        nickname,
+        password
+      }
+    });
+  };
 
   if (isLogin) {
     return (
-      <>
+      <FormControls onSubmit={handleSubmit(onSubmit)}>
         <FormControlsTxt>最實用的線上代辦事項服務</FormControlsTxt>
-        <FormControlsLabel htmlFor="email">Email</FormControlsLabel>
+        <FormControlsLabel>Email</FormControlsLabel>
         <FormControlsInput
           type="text"
-          id="email"
-          name="email"
           placeholder="請輸入 email"
-          required></FormControlsInput>
-        <FormControlsErrorText>此欄位不可留空</FormControlsErrorText>
-        <FormControlsLabel htmlFor="pwd">密碼</FormControlsLabel>
+          key="loginEmail"
+          {...register('loginEmail', {
+            required: {
+              value: true,
+              message: '請輸入資料內容!'
+            },
+            pattern: {
+              value: /^\S+@\S+$/i,
+              message: '格式有誤!'
+            }
+          })}></FormControlsInput>
+        {errors.loginEmail && (
+          <FormControlsErrorText>{errors.loginEmail.message}</FormControlsErrorText>
+        )}
+        <FormControlsLabel>密碼</FormControlsLabel>
         <FormControlsInput
           type="password"
-          name="pwd"
-          id="pwd"
           placeholder="請輸入密碼"
-          required></FormControlsInput>
-        <Link className="text-center" to="todolist">
-          <FormControlsBtnSubmit type="button" value="登入"></FormControlsBtnSubmit>
-        </Link>
+          key="loginPassword"
+          {...register('loginPassword', {
+            required: {
+              value: true,
+              message: '此欄位不可留空'
+            },
+            minLength: {
+              value: 6,
+              message: '密碼長度至少6位字元'
+            }
+          })}></FormControlsInput>
+        {errors.loginPassword && (
+          <FormControlsErrorText>{errors.loginPassword.message}</FormControlsErrorText>
+        )}
+        <FormControlsBtnSubmit type="submit" value="登入"></FormControlsBtnSubmit>
         <FormControlsBtnLink onClick={toggleLogin}>註冊帳號</FormControlsBtnLink>
-      </>
+      </FormControls>
     );
   }
   return (
-    <>
+    <FormControls onSubmit={handleSubmit(onSubmit)}>
       <FormControlsTxt>註冊帳號</FormControlsTxt>
-      <FormControlsLabel htmlFor="email">Email</FormControlsLabel>
+      <FormControlsLabel>Email</FormControlsLabel>
       <FormControlsInput
         type="text"
-        id="email"
-        name="email"
         placeholder="請輸入 email"
-        required></FormControlsInput>
-      <FormControlsLabel htmlFor="name">您的暱稱</FormControlsLabel>
+        key="signUpEmail"
+        {...register('signUpEmail', {
+          required: {
+            value: true,
+            message: '此欄位不可留空'
+          },
+          pattern: {
+            value: /^\S+@\S+$/i,
+            message: '格式有誤!'
+          }
+        })}></FormControlsInput>
+      {errors.signUpEmail && (
+        <FormControlsErrorText>{errors.signUpEmail.message}</FormControlsErrorText>
+      )}
+      <FormControlsLabel>您的暱稱</FormControlsLabel>
       <FormControlsInput
         type="text"
-        id="name"
-        name="name"
         placeholder="請輸入您的暱稱"
-        required></FormControlsInput>
-      <FormControlsLabel htmlFor="pwd">密碼</FormControlsLabel>
+        {...register('signUpNickname', { required: true })}></FormControlsInput>
+      {errors.signUpNickname && <FormControlsErrorText>此欄位不可留空</FormControlsErrorText>}
+      <FormControlsLabel>密碼</FormControlsLabel>
       <FormControlsInput
         type="password"
-        id="pwd"
-        name="pwd"
         placeholder="請輸入密碼"
-        required></FormControlsInput>
-      <FormControlsLabel htmlFor="pwd">再次輸入密碼</FormControlsLabel>
+        key="signUpPassword"
+        {...register('signUpPassword', {
+          required: {
+            value: true,
+            message: '此欄位不可留空'
+          },
+          minLength: {
+            value: 6,
+            message: '密碼長度至少6位字元'
+          }
+        })}></FormControlsInput>
+      {errors.signUpPassword && (
+        <FormControlsErrorText>{errors.signUpPassword.message}</FormControlsErrorText>
+      )}
+      <FormControlsLabel>再次輸入密碼</FormControlsLabel>
       <FormControlsInput
         type="password"
-        id="pwd"
-        name="pwd"
         placeholder="再次輸入密碼"
-        required></FormControlsInput>
-      <Link className="text-center" to="todolist">
-        <FormControlsBtnSubmit type="button" value="註冊帳號"></FormControlsBtnSubmit>
-      </Link>
+        {...register('signUpRePassword', {
+          required: {
+            value: true,
+            message: '此欄位不可留空'
+          },
+          minLength: {
+            value: 6,
+            message: '密碼長度至少6位字元'
+          },
+          validate: (val) => {
+            if (watch('signUpPassword') !== val) {
+              return '密碼不一致';
+            }
+          }
+        })}></FormControlsInput>
+      {errors.signUpRePassword && (
+        <FormControlsErrorText>{errors.signUpRePassword.message}</FormControlsErrorText>
+      )}
+      <FormControlsBtnSubmit value="註冊帳號" type="submit"></FormControlsBtnSubmit>
       <FormControlsBtnLink onClick={toggleLogin}>登入</FormControlsBtnLink>
-    </>
+    </FormControls>
   );
 };
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
+  const navigate = useNavigate();
+
+  const signUp = async (payload: SignUpReq) => {
+    try {
+      const res = await authService.signUp(payload);
+
+      alert(`${res.message}，請重新登入`);
+      setIsLogin(true);
+    } catch (e: any) {
+      alert(e.error[0]);
+    }
+  };
+
+  const login = async (payload: LoginReq) => {
+    try {
+      const res = await authService.login(payload);
+
+      authService.setToken(res.headers.authorization);
+      authService.setUser(res.data.nickname);
+      navigate('/todolist');
+    } catch (e: any) {
+      alert(e.message);
+    }
+  };
+
+  useEffect(() => {
+    if (authService.getToken()) {
+      navigate('/todolist');
+    }
+  }, []);
 
   return (
     <LoginPage>
@@ -102,9 +231,11 @@ const Auth = () => {
           <BgImg src="https://upload.cc/i1/2022/03/23/tj3Bdk.png" alt="workImg" />
         </Side>
         <div>
-          <FormControls>
-            <LoginOrSign isLogin={isLogin} setIsLogin={setIsLogin}></LoginOrSign>
-          </FormControls>
+          <LoginOrSign
+            isLogin={isLogin}
+            setIsLogin={setIsLogin}
+            signUp={signUp}
+            login={login}></LoginOrSign>
         </div>
       </Container>
     </LoginPage>

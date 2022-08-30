@@ -1,8 +1,18 @@
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
+import authService from '../services/useAuth';
 import { Nav, NavItem } from '../pages/TodoListStyled';
 
 const NavBar = () => {
+  const navigate = useNavigate();
+
+  const logout = async () => {
+    await authService.signOut();
+    authService.clearToken();
+    navigate('/');
+  };
+
   return (
     <Nav>
       <h1>
@@ -10,12 +20,14 @@ const NavBar = () => {
       </h1>
       <ul>
         <NavItem>
-          <a href="#">
-            <span>王小明的代辦</span>
+          <a>
+            <span>{authService.getUser()} 的代辦</span>
           </a>
         </NavItem>
         <li>
-          <Link to="/">登出</Link>
+          <a onClick={logout}>
+            <span>登出</span>
+          </a>
         </li>
       </ul>
     </Nav>
