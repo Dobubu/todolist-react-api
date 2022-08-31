@@ -14,6 +14,7 @@ import {
   TodoEmpty
 } from './TodoListStyled';
 import TodoItem from '../components/TodoItem';
+import Loading from '../components/Loading';
 import emptyTodo from '../assets/images/empty.png';
 
 export enum TodoStatus {
@@ -27,6 +28,7 @@ const TodoList = () => {
   const [filterList, setFilterList] = useState<Todo[]>([]);
   const [todo, setTodo] = useState('');
   const [todoStatus, setTodoStatus] = useState<TodoStatus>(TodoStatus.All);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchList = async () => {
     try {
@@ -35,6 +37,12 @@ const TodoList = () => {
     } catch (e: any) {
       alert(e.message);
     }
+  };
+
+  const fetchListInit = async () => {
+    setIsLoading(true);
+    await fetchList();
+    setIsLoading(false);
   };
 
   const todoHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,11 +123,13 @@ const TodoList = () => {
   }, [todoStatus, list]);
 
   useEffect(() => {
-    fetchList();
+    fetchListInit();
   }, []);
 
   return (
     <Container>
+      {isLoading ? <Loading /> : <></>}
+
       <TodoWrapper>
         <TodoInputEl onSubmit={addTodo}>
           <input type="input" value={todo} onChange={todoHandler} placeholder="請輸入待辦事項" />

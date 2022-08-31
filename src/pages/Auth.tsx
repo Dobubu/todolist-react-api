@@ -18,6 +18,7 @@ import {
 } from './AuthStyled';
 import authService from '../services/useAuth';
 import { SignUpReq, LoginReq } from '../api/auth';
+import Loading from '../components/Loading';
 
 interface LoginOrSignProps {
   isLogin: boolean;
@@ -190,21 +191,26 @@ const LoginOrSign = ({ isLogin, setIsLogin, signUp, login }: LoginOrSignProps) =
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const signUp = async (payload: SignUpReq) => {
     try {
+      setIsLoading(true);
       const res = await authService.signUp(payload);
 
       alert(`${res.message}，請重新登入`);
       setIsLogin(true);
     } catch (e: any) {
       alert(e.error[0]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const login = async (payload: LoginReq) => {
     try {
+      setIsLoading(true);
       const res = await authService.login(payload);
 
       authService.setToken(res.headers.authorization);
@@ -212,6 +218,8 @@ const Auth = () => {
       navigate('/todolist');
     } catch (e: any) {
       alert(e.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -223,6 +231,8 @@ const Auth = () => {
 
   return (
     <LoginPage>
+      {isLoading ? <Loading /> : <></>}
+
       <Container>
         <Side>
           <a href="#">
