@@ -15,6 +15,7 @@ import {
 } from './TodoListStyled';
 import TodoItem from '../components/TodoItem';
 import Loading from '../components/Loading';
+import LoadingIcon from '../components/LoadingIcon';
 import emptyTodo from '../assets/images/empty.png';
 
 export enum TodoStatus {
@@ -29,6 +30,7 @@ const TodoList = () => {
   const [todo, setTodo] = useState('');
   const [todoStatus, setTodoStatus] = useState<TodoStatus>(TodoStatus.All);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAddLoading, setIsAddLoading] = useState(false);
 
   const fetchList = async () => {
     try {
@@ -51,6 +53,9 @@ const TodoList = () => {
 
   const addTodo = async () => {
     try {
+      if (!todo) throw new Error('代辦事項必填');
+
+      setIsAddLoading(true);
       const dict = {
         todo: {
           content: todo
@@ -62,6 +67,8 @@ const TodoList = () => {
       fetchList();
     } catch (e: any) {
       alert(e.message);
+    } finally {
+      setIsAddLoading(false);
     }
   };
 
@@ -133,6 +140,7 @@ const TodoList = () => {
       <TodoWrapper>
         <TodoInputEl onSubmit={addTodo}>
           <input type="input" value={todo} onChange={todoHandler} placeholder="請輸入待辦事項" />
+          {isAddLoading ? <LoadingIcon /> : <></>}
           <a type="submit">
             <FontAwesomeIcon icon="plus" onClick={addTodo} />
           </a>

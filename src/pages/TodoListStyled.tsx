@@ -81,9 +81,12 @@ export const TodoInputEl = styled.form`
   width: 100%;
   display: flex;
   position: relative;
+  align-items: center;
   margin-bottom: 16px;
   box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
 
+  background: #fff;
+  border-radius: 10px;
   input {
     background: #fff;
     border: none;
@@ -93,13 +96,14 @@ export const TodoInputEl = styled.form`
     height: 47px;
     font-size: 1rem;
     padding-left: 16px;
+    outline: none;
   }
 
   a {
     display: block;
     width: 40px;
     height: 39px;
-    position: absolute;
+    /* position: absolute; */
     background: var(--secondary);
     color: white;
     font-size: 20px;
@@ -110,6 +114,7 @@ export const TodoInputEl = styled.form`
     right: 4px;
     padding: 10px;
     cursor: pointer;
+    margin-right: 4px;
   }
 `;
 
