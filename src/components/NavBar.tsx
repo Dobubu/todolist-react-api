@@ -18,18 +18,22 @@ const NavBar = () => {
       <h1>
         <Link to="/">ONLINE TODO LIST</Link>
       </h1>
-      <ul>
-        <NavItem>
-          <a>
-            <span>{authService.getUser()} 的代辦</span>
-          </a>
-        </NavItem>
-        <li>
-          <a onClick={logout}>
-            <span>登出</span>
-          </a>
-        </li>
-      </ul>
+      {authService.getToken() ? (
+        <ul>
+          <NavItem>
+            <a>
+              <span>{authService.getUser()} 的代辦</span>
+            </a>
+          </NavItem>
+          <li>
+            <a onClick={logout}>
+              <span>登出</span>
+            </a>
+          </li>
+        </ul>
+      ) : (
+        <></>
+      )}
     </Nav>
   );
 };

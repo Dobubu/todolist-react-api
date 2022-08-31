@@ -4,6 +4,7 @@ import Layout from './layout/Default';
 import Auth from './pages/Auth';
 import TodoList from './pages/TodoList';
 import NotFound from './pages/NotFound';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -11,7 +12,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Auth />} />
         <Route element={<Layout />}>
-          <Route path="todolist" element={<TodoList />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="todolist" element={<TodoList />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
