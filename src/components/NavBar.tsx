@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 import authService from '../services/useAuth';
+import { notifySuccess } from '../services/useNotify';
 import { Nav, NavItem } from '../pages/TodoListStyled';
 
 const NavBar = () => {
@@ -11,6 +12,7 @@ const NavBar = () => {
     await authService.signOut();
     authService.clearToken();
     navigate('/');
+    notifySuccess('登出成功');
   };
 
   return (

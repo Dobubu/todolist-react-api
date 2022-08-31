@@ -17,6 +17,7 @@ import {
   FormControlsErrorText
 } from './AuthStyled';
 import authService from '../services/useAuth';
+import { notifySuccess, notifyError } from '../services/useNotify';
 import { SignUpReq, LoginReq } from '../api/auth';
 import Loading from '../components/Loading';
 
@@ -199,10 +200,10 @@ const Auth = () => {
       setIsLoading(true);
       const res = await authService.signUp(payload);
 
-      alert(`${res.message}，請重新登入`);
+      notifySuccess(`${res.message}，請重新登入`);
       setIsLogin(true);
     } catch (e: any) {
-      alert(e.error[0]);
+      notifyError(e.error[0]);
     } finally {
       setIsLoading(false);
     }
@@ -216,8 +217,9 @@ const Auth = () => {
       authService.setToken(res.headers.authorization);
       authService.setUser(res.data.nickname);
       navigate('/todolist');
+      notifySuccess('登入成功');
     } catch (e: any) {
-      alert(e.message);
+      notifyError(e.message);
     } finally {
       setIsLoading(false);
     }

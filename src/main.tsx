@@ -11,9 +11,10 @@ import './assets/sass/index.css';
 library.add(faTimes, faPlus, faCircleNotch);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <HashRouter>
-      <App />
-    </HashRouter>
-  </React.StrictMode>
+  // fix useEffect call twice
+  // <React.StrictMode>
+  <HashRouter>
+    <App />
+  </HashRouter>
+  // </React.StrictMode>
 );

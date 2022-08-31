@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { apiGetTodoList, apiAddTodo, Todo, apiDeleteTodo, apiToggleTodo } from '../api/todo';
+import { notifySuccess, notifyError, notifyInfo } from '../services/useNotify';
 import {
   Container,
   TodoWrapper,
@@ -37,7 +38,7 @@ const TodoList = () => {
       const res = await apiGetTodoList();
       setList(res.data.todos);
     } catch (e: any) {
-      alert(e.message);
+      notifyError(e.message);
     }
   };
 
@@ -65,8 +66,9 @@ const TodoList = () => {
 
       setTodo('');
       fetchList();
+      notifySuccess('新增成功');
     } catch (e: any) {
-      alert(e.message);
+      notifyError(e.message);
     } finally {
       setIsAddLoading(false);
     }
@@ -77,9 +79,9 @@ const TodoList = () => {
       const res = await apiDeleteTodo(id);
 
       fetchList();
-      alert(res.data.message);
+      notifySuccess(res.data.message);
     } catch (e: any) {
-      alert(e.message);
+      notifyError(e.message);
     }
   };
 
@@ -89,12 +91,12 @@ const TodoList = () => {
 
       fetchList();
       if (res.data.completed_at) {
-        alert(`${res.data.content} 切換成完成`);
+        notifyInfo(`${res.data.content} 切換成完成`);
       } else {
-        alert(`${res.data.content} 切換成待完成`);
+        notifyInfo(`${res.data.content} 切換成待完成`);
       }
     } catch (e: any) {
-      alert(e.message);
+      notifyError(e.message);
     }
   };
 
@@ -105,9 +107,9 @@ const TodoList = () => {
       const promiseArray = completedList.map((o) => apiDeleteTodo(o.id));
       await Promise.all(promiseArray);
       fetchList();
-      alert('清除成功');
+      notifySuccess('清除成功');
     } else {
-      alert('目前沒有完成項目');
+      notifyInfo('目前沒有完成項目');
     }
   };
 
