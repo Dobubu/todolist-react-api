@@ -17,7 +17,8 @@ import {
   FormControlsErrorText
 } from './AuthStyled';
 import authService from '../services/useAuth';
-import { notifySuccess, notifyError } from '../services/useNotify';
+import { notifySuccess } from '../services/useNotify';
+import { handleErrorAsync } from '../services/useHandleMessage';
 import { SignUpReq, LoginReq } from '../api/auth';
 import Loading from '../components/Loading';
 
@@ -51,7 +52,7 @@ const LoginOrSign = ({ isLogin, setIsLogin, signUp, login }: LoginOrSignProps) =
     formState: { errors }
   } = useForm<AuthForm>();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: AuthForm) => {
     if (isLogin) {
       const { loginEmail: email, loginPassword: password } = data;
       return login({
@@ -196,21 +197,19 @@ const Auth = () => {
   const navigate = useNavigate();
 
   const signUp = async (payload: SignUpReq) => {
-    try {
+    const run = handleErrorAsync(async () => {
       setIsLoading(true);
       const res = await authService.signUp(payload);
 
       notifySuccess(`${res.message}，請重新登入`);
       setIsLogin(true);
-    } catch (e: any) {
-      notifyError(e.error[0]);
-    } finally {
-      setIsLoading(false);
-    }
+    }, setIsLoading);
+
+    run();
   };
 
   const login = async (payload: LoginReq) => {
-    try {
+    const run = handleErrorAsync(async () => {
       setIsLoading(true);
       const res = await authService.login(payload);
 
@@ -218,11 +217,9 @@ const Auth = () => {
       authService.setUser(res.data.nickname);
       navigate('/todolist');
       notifySuccess('登入成功');
-    } catch (e: any) {
-      notifyError(e.message);
-    } finally {
-      setIsLoading(false);
-    }
+    }, setIsLoading);
+
+    run();
   };
 
   useEffect(() => {

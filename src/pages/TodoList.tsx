@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { apiGetTodoList, apiAddTodo, Todo, apiDeleteTodo, apiToggleTodo } from '../api/todo';
-import { notifySuccess, notifyError, notifyInfo } from '../services/useNotify';
+import { notifySuccess, notifyInfo } from '../services/useNotify';
+import { handleErrorAsync } from '../services/useHandleMessage';
+
 import {
   Container,
   TodoWrapper,
@@ -38,25 +40,29 @@ const TodoList = () => {
       const res = await apiGetTodoList();
       setList(res.data.todos);
     } catch (e: any) {
-      notifyError(e.message);
+      return e;
     }
   };
 
-  const fetchListInit = async () => {
+  const fetchListInit = handleErrorAsync(async () => {
     setIsLoading(true);
-    await fetchList();
-    setIsLoading(false);
-  };
+
+    const res = await apiGetTodoList();
+    setList(res.data.todos);
+  }, setIsLoading);
 
   const todoHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTodo(e.target.value);
   };
 
-  const addTodo = async () => {
-    try {
+  const addTodo = (e: React.FormEvent<EventTarget>) => {
+    e.preventDefault();
+
+    const run = handleErrorAsync(async () => {
       if (!todo) throw new Error('代辦事項必填');
 
       setIsAddLoading(true);
+
       const dict = {
         todo: {
           content: todo
@@ -67,40 +73,37 @@ const TodoList = () => {
       setTodo('');
       fetchList();
       notifySuccess('新增成功');
-    } catch (e: any) {
-      notifyError(e.message);
-    } finally {
-      setIsAddLoading(false);
-    }
+    }, setIsAddLoading);
+
+    run();
   };
 
   const deleteTodo = async (id: string) => {
-    try {
+    const run = handleErrorAsync(async () => {
       const res = await apiDeleteTodo(id);
-
       fetchList();
       notifySuccess(res.data.message);
-    } catch (e: any) {
-      notifyError(e.message);
-    }
+    });
+
+    run();
   };
 
   const toggleTodo = async (id: string) => {
-    try {
+    const run = handleErrorAsync(async () => {
       const res = await apiToggleTodo(id);
 
       fetchList();
       if (res.data.completed_at) {
-        notifyInfo(`${res.data.content} 切換成完成`);
+        notifyInfo(`${res.data.content} 切換成 "完成"`);
       } else {
-        notifyInfo(`${res.data.content} 切換成待完成`);
+        notifyInfo(`${res.data.content} 切換成 "待完成"`);
       }
-    } catch (e: any) {
-      notifyError(e.message);
-    }
+    });
+
+    run();
   };
 
-  const clearCompletedTodos = async () => {
+  const clearCompletedTodos = handleErrorAsync(async () => {
     const completedList = list.filter((o) => o.completed_at);
 
     if (completedList.length) {
@@ -111,7 +114,7 @@ const TodoList = () => {
     } else {
       notifyInfo('目前沒有完成項目');
     }
-  };
+  });
 
   const filterListHandler = () => {
     switch (todoStatus) {
@@ -143,8 +146,8 @@ const TodoList = () => {
         <TodoInputEl onSubmit={addTodo}>
           <input type="input" value={todo} onChange={todoHandler} placeholder="請輸入待辦事項" />
           {isAddLoading ? <LoadingIcon /> : <></>}
-          <a type="submit">
-            <FontAwesomeIcon icon="plus" onClick={addTodo} />
+          <a type="submit" onClick={addTodo}>
+            <FontAwesomeIcon icon="plus" />
           </a>
         </TodoInputEl>
         {list.length > 0 ? (

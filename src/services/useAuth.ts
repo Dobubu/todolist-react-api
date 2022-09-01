@@ -1,5 +1,9 @@
+import { NavigateFunction } from 'react-router-dom';
+
 import { StorageType } from './type';
 import { SignUpReq, apiSignUp, LoginReq, apiLogin, apiSignOut } from '../api/auth';
+import { notifySuccess } from '../services/useNotify';
+import { handleErrorAsync } from './useHandleMessage';
 
 const setToken = (token: string) => localStorage.setItem(StorageType.ACCESSTOKEN, token);
 
@@ -15,7 +19,16 @@ const signUp = (user: SignUpReq) => apiSignUp(user);
 
 const login = (user: LoginReq) => apiLogin(user);
 
-const signOut = () => apiSignOut();
+const signOut = (navigate: NavigateFunction) => {
+  const run = handleErrorAsync(async () => {
+    await apiSignOut();
+    clearToken();
+    navigate('/');
+    notifySuccess('登出成功');
+  });
+
+  run();
+};
 
 const authService = {
   setToken,
