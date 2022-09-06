@@ -122,7 +122,7 @@ const TodoList = () => {
         <TodoInputEl onSubmit={addTodo}>
           <input type="input" value={todo} onChange={todoHandler} placeholder="請輸入待辦事項" />
           <a type="submit">
-            <FontAwesomeIcon icon="plus" />
+            <FontAwesomeIcon icon="plus" onClick={addTodo} />
           </a>
         </TodoInputEl>
         <TodoContent>
